@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="Ex6.css" />
+    <title>Ex6</title>
+  </head>
+  <body>
+    <div id="studentListContainer">
+      <table id="studentTable">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Danh sách sinh viên sẽ được hiển thị ở đây -->
+        </tbody>
+      </table>
+      <div>
+        <button type="button">Add</button>
+        <button type="button" onclick="deleteSelectedStudents()">
+          Delete Selected Students
+        </button>
+      </div>
+    </div>
+
+    <div id="addStudentFormContainer">
+      <h2>Add Student</h2>
+      <form id="addStudentForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required />
+
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" required />
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required />
+
+        <button type="button" onclick="addStudent()">Add Student</button>
+      </form>
+    </div>
+
+    <script src="Ex6.js"></script>
+  </body>
+</html>
