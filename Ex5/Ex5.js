@@ -46,7 +46,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   let currentQuestion = 0;
   let score = 0;
-  let countdownTime = 60; // Thời gian đếm ngược
+  let countdownTime = localStorage.getItem("countdownTime");
+  countdownTime = countdownTime ? parseInt(countdownTime) : 60;
+  let selectedOption = localStorage.getItem("selectedOption");
+
   let countdownInterval;
   let submitted = false; // Thêm biến để theo dõi đã nhấn submit hay chưa
 
@@ -152,15 +155,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Hàm cập nhật thời gian đếm ngược
+  // Hàm cập nhật thời gian countdown và lưu vào Local Storage
   function updateCountdown() {
-    countdownTime--;
-    document.getElementById("countdown").innerText = `${countdownTime}s`;
+    if (countdownTime > 0) {
+      countdownTime--;
+      document.getElementById("countdown").innerText = `${countdownTime}s`;
+    }
 
-    if (countdownTime <= 0) {
+    if (countdownTime === 0) {
       clearInterval(countdownInterval);
       showResult();
     }
+
+    // Lưu giá trị countdown vào Local Storage
+    localStorage.setItem("countdownTime", countdownTime);
+  }
+
+  // Hàm lưu đáp án đã chọn vào Local Storage
+  function saveSelectedOption(selectedIndex) {
+    localStorage.setItem("selectedOption", selectedIndex);
   }
 
   // Sự kiện khi nhấn nút Previous
