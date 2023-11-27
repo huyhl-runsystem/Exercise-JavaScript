@@ -2,6 +2,26 @@ const numberSelector = document.getElementById("numberSelector");
 const cityItems = document.getElementsByClassName("item");
 
 document.addEventListener("DOMContentLoaded", function () {
+  const options = [
+    { value: "", text: "" },
+    { value: "one", text: "1" },
+    { value: "two", text: "2" },
+    { value: "three", text: "3" },
+    { value: "four", text: "4" },
+    { value: "five", text: "5" },
+    { value: "six", text: "6" },
+    { value: "even", text: "Chẵn" },
+    { value: "odd", text: "Lẻ" },
+    { value: "reset", text: "Reset" },
+  ];
+
+  options.forEach((option) => {
+    const optionElement = document.createElement("option");
+    optionElement.value = option.value;
+    optionElement.text = option.text;
+    numberSelector.add(optionElement);
+  });
+
   numberSelector.addEventListener("change", function () {
     highlightRows(this.value, cityItems);
   });
