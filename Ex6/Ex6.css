@@ -1,59 +1,62 @@
-#studentTable {
-  border-collapse: collapse;
-  width: 80%; /* Đặt kích thước bảng theo mong muốn */
-  margin: 20px 0; /* Tạo khoảng cách trên và dưới bảng */
-}
-
-#studentTable th,
-#studentTable td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-#studentTable th {
-  background-color: #f2f2f2;
-}
-
-#studentTable tbody tr:hover {
-  background-color: #f5f5f5;
-}
-
-.student-checkbox {
-  margin-right: 5px;
-}
-
-#addStudentFormContainer {
-  margin-bottom: 20px;
-}
-
-#addStudentFormContainer form {
+#container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-#addStudentFormContainer label {
-  margin-bottom: 5px;
+#userTable {
+  border-collapse: collapse;
+  margin: 20px 0;
 }
 
-#addStudentFormContainer button {
-  margin-top: 10px;
-  padding: 5px 10px;
-}
-#addStudentFormContainer {
-  margin-bottom: 20px;
-}
-
-#addStudentForm {
-  display: inline-block;
-  padding: 10px; /* Thêm padding cho phần bao bọc */
-  border: 1px solid #ddd; /* Đường viền để tạo đường biên cho khung */
-  border-radius: 8px; /* Bo tròn góc cho khung */
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Đổ bóng cho khung */
+#userTable th,
+#userTable td {
+  border: 1px solid black;
+  padding: 10px;
+  text-align: center;
 }
 
-#addStudentForm label {
+#userTable th {
+  background-color: #f2f2f2;
+}
+
+.user-checkbox {
+  margin-right: 5px;
+}
+
+.button-control button {
+  margin-bottom: 10px;
+}
+
+#addUserForm {
+  width: 300px;
+  border: 1px solid black;
+  padding: 20px;
+}
+
+#addUserForm label {
   display: block;
   margin-bottom: 5px;
+}
+
+#addUserForm input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+#addUserForm button {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#addUserForm button:hover {
+  background-color: #45a049;
 }

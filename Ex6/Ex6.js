@@ -1,96 +1,114 @@
-var students = [
+var users = [
   { name: "Huy", phone: "0123456789", email: "huy@gmail.com" },
   { name: "Hậu", phone: "0987654321", email: "hau@gmail.com" },
   { name: "Kỳ", phone: "0987654321", email: "ky@gmail.com" },
 ];
 
-var studentTableBody = document.querySelector("#studentTable tbody");
-var addStudentForm = document.getElementById("addStudentForm");
-var isEditing = false; // Biến để kiểm tra xem có ở chế độ chỉnh sửa hay không
-var editingIndex = null; // Chỉ số của sinh viên đang được chỉnh sửa
+const userTableBody = document.querySelector("#userTable tbody");
+const addUserForm = document.getElementById("addUserForm");
+const isEditing = false;
+const editingIndex = null;
 
-function displayStudents() {
-  // Xóa dữ liệu cũ
-  studentTableBody.innerHTML = "";
+function displayUsers() {
+  userTableBody.innerHTML = "";
 
-  students.forEach(function (student, index) {
+  users.forEach(function (user, index) {
     var row = document.createElement("tr");
-    row.innerHTML = `
-                  <td><input type="checkbox" class="student-checkbox" data-index="${index}"></td>
-                  <td>${student.name}</td>
-                  <td>${student.phone}</td>
-                  <td>${student.email}</td>
-                  <td>
-                      <button onclick="editStudent(${index})">Edit</button>
-                      <button onclick="deleteStudent(${index})">Delete</button>
-                  </td>
-              `;
-    studentTableBody.appendChild(row);
+
+    var checkboxCell = document.createElement("td");
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "user-checkbox";
+    checkbox.dataset.index = index;
+    checkboxCell.appendChild(checkbox);
+    row.appendChild(checkboxCell);
+
+    checkbox.addEventListener("click", function (event) {
+      event.stopPropagation();
+    });
+
+    for (const key in user) {
+      const cell = document.createElement("td");
+      cell.textContent = user[key];
+      cell.addEventListener("click", function () {
+        editCell(user, key, cell);
+      });
+      row.appendChild(cell);
+    }
+
+    const deleteCell = document.createElement("td");
+    deleteCell.innerHTML = `<button onclick="deleteUser(${index})">Delete</button>`;
+    row.appendChild(deleteCell);
+
+    userTableBody.appendChild(row);
   });
 }
 
-function addStudent() {
-  var name = document.getElementById("name").value;
-  var phone = document.getElementById("phone").value;
-  var email = document.getElementById("email").value;
+function addUser() {
+  const name = document.getElementById("name").value;
+  const phone = document.getElementById("phone").value;
+  const email = document.getElementById("email").value;
 
   if (name && phone && email) {
     if (isEditing) {
-      // Nếu đang ở chế độ chỉnh sửa, cập nhật thông tin sinh viên
-      students[editingIndex] = { name: name, phone: phone, email: email };
+      users[editingIndex] = { name: name, phone: phone, email: email };
       isEditing = false;
       editingIndex = null;
     } else {
-      // Ngược lại, thêm sinh viên mới
-      students.push({ name: name, phone: phone, email: email });
+      users.push({ name: name, phone: phone, email: email });
     }
 
-    displayStudents(); // Cập nhật bảng hiển thị
-    // Reset form và chuyển về chế độ thêm mới
-    addStudentForm.reset();
+    displayUsers();
+    addUserForm.reset();
   } else {
     alert("Please fill in all fields.");
   }
 }
 
-function deleteStudent(index) {
-  students.splice(index, 1);
-  displayStudents(); // Cập nhật bảng hiển thị
+function deleteUser(index) {
+  users.splice(index, 1);
+  displayUsers();
 }
 
-function deleteSelectedStudents() {
-  var selectedCheckboxes = document.querySelectorAll(
-    ".student-checkbox:checked"
+function deleteSelectedUsers() {
+  const selectedCheckboxes = document.querySelectorAll(
+    ".user-checkbox:checked"
   );
 
-  // Lặp qua danh sách checkbox được chọn và xóa sinh viên từ mảng
   for (var i = selectedCheckboxes.length - 1; i >= 0; i--) {
     var index = selectedCheckboxes[i].dataset.index;
-    students.splice(index, 1);
+    users.splice(index, 1);
   }
 
-  displayStudents(); // Cập nhật bảng hiển thị
+  displayUsers();
 }
 
-// Sự kiện click trên document để lưu thông tin khi thoát khỏi chế độ chỉnh sửa
 document.addEventListener("click", function (event) {
-  var isClickedInsideForm = addStudentForm.contains(event.target);
+  var isClickedInsideForm = addUserForm.contains(event.target);
   if (isEditing && !isClickedInsideForm) {
-    addStudent();
+    addUser();
   }
 });
 
-displayStudents();
+displayUsers();
 
-function editStudent(index) {
-  var student = students[index];
+function editCell(user, key, cell) {
+  const input = document.createElement("input");
+  input.value = user[key];
+  input.addEventListener("blur", function () {
+    saveEditedValue(user, key, input, cell);
+  });
 
-  // Điền thông tin sinh viên vào form
-  document.getElementById("name").value = student.name;
-  document.getElementById("phone").value = student.phone;
-  document.getElementById("email").value = student.email;
+  cell.innerHTML = "";
+  cell.appendChild(input);
+  input.select();
 
-  // Đặt chế độ chỉnh sửa và chỉ số của sinh viên đang được chỉnh sửa
-  isEditing = true;
-  editingIndex = index;
+  cell.addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
+}
+
+function saveEditedValue(user, key, input, cell) {
+  user[key] = input.value;
+  cell.innerHTML = input.value;
 }
