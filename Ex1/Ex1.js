@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.addEventListener("keydown", function (event) {
   var isShiftKey = event.shiftKey;
-  var isDeleteKey = event.key === "Delete" || event.key === "Del";
+  var isDeleteKey = event.key === "Delete";
 
   if (isShiftKey) {
     if (validateForm()) {
@@ -198,9 +198,7 @@ function validateForm(event) {
 
   if (!isValid) {
     event.preventDefault();
-    console.log("Form submitted faild !");
   } else {
     submitForm();
-    console.log("Form submitted successfully!");
   }
 }
