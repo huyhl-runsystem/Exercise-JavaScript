@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
   let countdownInterval;
   let submitted = false; // Thêm biến để theo dõi đã nhấn submit hay chưa
 
-  // Hàm bắt đầu bài trắc nghiệm
   function startQuiz() {
     loadQuestion();
     countdownInterval = setInterval(updateCountdown, 1000);
@@ -197,12 +196,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Sự kiện khi nhấn nút Submit
   submitButton.addEventListener("click", () => {
     submitted = true; // Đánh dấu là đã nhấn submit
     showResult();
   });
 
-  // Bắt đầu bài trắc nghiệm khi tải xong trang
   startQuiz();
 });
