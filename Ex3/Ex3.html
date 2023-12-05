@@ -14,11 +14,11 @@
         <div class="msg"></div>
         <div class="panel">
           <div class="control-button">
-            <button type="button" onclick="applyStyle('bold')">Đậm</button>
-            <button type="button" onclick="applyStyle('italic')">
+            <button type="button" onclick="applyBold('bold','left')">Đậm</button>
+            <button type="button" onclick="applyItalic('italic','left')">
               Nghiêng
             </button>
-            <button type="reset">Reset</button>
+            <button type="reset" onclick="resetInput('left')">Reset</button>
           </div>
           <div class="send-msg">
             <textarea name="message" id="leftMessage"></textarea>
@@ -31,13 +31,13 @@
         <div class="msg"></div>
         <div class="panel">
           <div class="control-button">
-            <button type="button" onclick="applyStyle('bold')">Đậm</button>
-            <button type="button" onclick="applyStyle('italic')">
+            <button type="button" onclick="applyBold('bold','right')">Đậm</button>
+            <button type="button" onclick="applyItalic('italic','right')">
               Nghiêng
             </button>
-            <button type="reset">Reset</button>
+            <button type="reset" onclick="resetInput('right')">Reset</button>
           </div>
-          <div class="send-msg">
+          <div class="send-msg"> 
             <textarea name="message" id="rightMessage"></textarea>
             <button type="button" onclick="sendMessage('right')">SEND</button>
           </div>

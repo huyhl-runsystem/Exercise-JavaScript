@@ -1,6 +1,6 @@
 function sendMessage(side) {
   var messageInput = document.getElementById(side + "Message");
-  var message = messageInput.value.trim(); // Trim leading and trailing whitespaces
+  var message = messageInput.value.trim();
 
   if (message !== "") {
     var chatbox = document.querySelector("." + side + " .msg");
@@ -9,6 +9,16 @@ function sendMessage(side) {
 
     var newMessage = document.createElement("p");
     newMessage.textContent = message;
+
+    var fontStyle = messageInput.style.fontStyle;
+    var fontWeight = messageInput.style.fontWeight;
+
+    if (fontStyle) {
+      newMessage.style.fontStyle = fontStyle;
+    }
+    if (fontWeight) {
+      newMessage.style.fontWeight = fontWeight;
+    }
 
     if (side === "right" || side === "left") {
       newMessage.classList.add("sent");
@@ -25,7 +35,14 @@ function sendMessage(side) {
     otherNewMessageWrapper.classList.add("message-wrapper");
 
     var otherNewMessage = document.createElement("p");
-    otherNewMessage.textContent = "Response: " + message;
+    otherNewMessage.textContent = "Received: " + message;
+
+    if (fontStyle) {
+      otherNewMessage.style.fontStyle = fontStyle;
+    }
+    if (fontWeight) {
+      otherNewMessage.style.fontWeight = fontWeight;
+    }
 
     if (otherSide === "left" || otherSide === "right") {
       otherNewMessage.classList.add("received");
@@ -34,4 +51,21 @@ function sendMessage(side) {
     otherNewMessageWrapper.appendChild(otherNewMessage);
     otherChatbox.appendChild(otherNewMessageWrapper);
   }
+}
+
+function applyItalic(style, side) {
+  var messageInput = document.getElementById(side + "Message");
+  messageInput.style.fontStyle = style;
+}
+function applyBold(style, side) {
+  var messageInput = document.getElementById(side + "Message");
+  messageInput.style.fontWeight = style;
+}
+
+function resetInput(side) {
+  var messageInput = document.getElementById(side + "Message");
+  messageInput.value = "";
+
+  messageInput.style.fontStyle = "";
+  messageInput.style.fontWeight = "";
 }
