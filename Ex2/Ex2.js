@@ -1,5 +1,6 @@
 const numberSelector = document.getElementById("numberSelector");
-const cityItems = document.getElementsByClassName("item");
+const cityList = document.getElementById("cityItems");
+const items = cityList.children;
 
 document.addEventListener("DOMContentLoaded", function () {
   const options = [
@@ -15,6 +16,15 @@ document.addEventListener("DOMContentLoaded", function () {
     { value: "reset", text: "Reset" },
   ];
 
+  const cities = [
+    "Hà Nội",
+    "Hồ Chí Minh",
+    "Đà Nẵng",
+    "Huế",
+    "Hải Phòng",
+    "Nha Trang",
+  ];
+
   options.forEach((option) => {
     const optionElement = document.createElement("option");
     optionElement.value = option.value;
@@ -22,46 +32,49 @@ document.addEventListener("DOMContentLoaded", function () {
     numberSelector.add(optionElement);
   });
 
-  numberSelector.addEventListener("change", function () {
-    highlightRows(this.value, cityItems);
+  cities.forEach((city, index) => {
+    const listItem = document.createElement("li");
+    listItem.classList.add("item");
+    listItem.textContent = `${index + 1}.${city}`;
+    cityList.appendChild(listItem);
   });
+
+  numberSelector.addEventListener("change", function () {
+    highlightRows(this.value, items);
+  });
+
+  const itemMappings = {
+    one: 0,
+    two: 1,
+    three: 2,
+    four: 3,
+    five: 4,
+    six: 5,
+    even: (i) => i % 2 === 1,
+    odd: (i) => i % 2 === 0,
+  };
+
+  function setItemBackground(index, color) {
+    if (index >= 0 && index < items.length) {
+      items[index].style.backgroundColor = color;
+    }
+  }
 
   function highlightRows(selectedValue, items) {
     for (var i = 0; i < items.length; i++) {
       items[i].style.backgroundColor = "";
     }
 
-    switch (selectedValue) {
-      case "one":
-        items[0].style.backgroundColor = "yellow";
-        break;
-      case "two":
-        items[1].style.backgroundColor = "yellow";
-        break;
-      case "three":
-        items[2].style.backgroundColor = "yellow";
-        break;
-      case "four":
-        items[3].style.backgroundColor = "yellow";
-        break;
-      case "five":
-        items[4].style.backgroundColor = "yellow";
-        break;
-      case "six":
-        items[5].style.backgroundColor = "yellow";
-        break;
-      case "even":
-        for (var i = 1; i < items.length; i += 2) {
-          items[i].style.backgroundColor = "yellow";
+    const mappingFunction = itemMappings[selectedValue];
+
+    if (typeof mappingFunction === "number") {
+      setItemBackground(mappingFunction, "yellow");
+    } else if (typeof mappingFunction === "function") {
+      for (let i = 0; i < items.length; i++) {
+        if (mappingFunction(i)) {
+          setItemBackground(i, "yellow");
         }
-        break;
-      case "odd":
-        for (var i = 0; i < items.length; i += 2) {
-          items[i].style.backgroundColor = "yellow";
-        }
-        break;
-      case "reset":
-        break;
+      }
     }
   }
 });
