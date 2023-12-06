@@ -1,3 +1,6 @@
+var boldState = false;
+var italicState = false;
+
 function sendMessage(side) {
   var messageInput = document.getElementById(side + "Message");
   var message = messageInput.value.trim();
@@ -55,17 +58,16 @@ function sendMessage(side) {
 
 function applyItalic(style, side) {
   var messageInput = document.getElementById(side + "Message");
-  messageInput.style.fontStyle = style;
+  italicState = !italicState;
+  messageInput.style.fontStyle = italicState ? style : "";
 }
 function applyBold(style, side) {
   var messageInput = document.getElementById(side + "Message");
-  messageInput.style.fontWeight = style;
+  boldState = !boldState;
+  messageInput.style.fontWeight = boldState ? style : "";
 }
 
 function resetInput(side) {
   var messageInput = document.getElementById(side + "Message");
   messageInput.value = "";
-
-  messageInput.style.fontStyle = "";
-  messageInput.style.fontWeight = "";
 }
