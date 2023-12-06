@@ -77,6 +77,15 @@ function showImage(input) {
   }
 }
 
+function clearErrors() {
+  fullNameError.textContent = "";
+  emailError.textContent = "";
+  phoneError.textContent = "";
+  birthdayError.textContent = "";
+  passwordError.textContent = "";
+  confirmPasswordError.textContent = "";
+}
+
 function resetForm() {
   inputs.forEach((input) => {
     input.value = "";
@@ -92,6 +101,8 @@ function resetForm() {
 
   avatarPreview.style.backgroundImage = "none";
   imagePreview.style.display = "block";
+
+  clearErrors();
 }
 
 function formatLastNameFirstLetter(str) {
@@ -201,4 +212,48 @@ function validateForm(event) {
   } else {
     submitForm();
   }
+
+  fullNameInput.addEventListener("input", function () {
+    clearErrorIfValid(fullNameInput, fullNameError);
+  });
+
+  emailInput.addEventListener("input", function () {
+    clearErrorIfValid(emailInput, emailError);
+  });
+
+  phoneInput.addEventListener("input", function () {
+    clearErrorIfValid(phoneInput, phoneError);
+  });
+
+  birthdayInput.addEventListener("input", function () {
+    clearErrorIfValid(birthdayInput, birthdayError);
+  });
+
+  passwordInput.addEventListener("input", function () {
+    clearErrorIfValid(passwordInput, passwordError);
+  });
+
+  confirmPasswordInput.addEventListener("input", function () {
+    clearErrorIfValid(confirmPasswordInput, confirmPasswordError);
+  });
+
+  function clearErrorIfValid(input, errorSpan) {
+    if (input.checkValidity()) {
+      errorSpan.textContent = "";
+    }
+  }
+  function validatePhone() {
+    const phone = phoneInput.value.trim();
+    const isValid = phoneRegex.test(phone);
+
+    if (!isValid) {
+      phoneError.textContent = "Invalid phone format";
+    }
+
+    return isValid;
+  }
+  phoneInput.addEventListener("input", function () {
+    validatePhone(); // Kiểm tra tính hợp lệ
+    clearErrorIfValid(phoneInput, phoneError);
+  });
 }

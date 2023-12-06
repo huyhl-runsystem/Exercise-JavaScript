@@ -12,7 +12,7 @@
       <form id="infoForm" onsubmit="validateForm(event)">
         <div class="info">
           <label for="fullName">Full Name:</label>
-          <input type="text" id="fullName" name="fullName" required />
+          <input type="text" id="fullName" name="fullName" maxlength="40" required />
         </div>
         <span class="error" id="fullNameError"></span>
 
@@ -30,7 +30,7 @@
 
         <div class="info">
           <label for="birthday">Birthday:</label>
-          <input type="text" id="birthday" name="birthday" required />
+          <input type="date" id="birthday" name="birthday" required />
         </div>
         <span class="error" id="birthdayError"></span>
 
