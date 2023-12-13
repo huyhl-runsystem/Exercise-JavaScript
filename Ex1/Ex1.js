@@ -29,18 +29,35 @@ const addButton = document.getElementById("add-button");
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const birthdayRegex =
-  /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/((19|20)\d\d)$/;
+  /^(0[1-9]|[12][0-9]|3[01])\-(0[1-9]|1[0-2])\-((19|20)\d\d)$/;
 const phoneRegex = /^0\d{9}$/;
 const passwordRegex =
   /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,30}$/;
 
+var isValid = true;
+
 function submitForm() {
   displayFullName.textContent = fullNameInput.value;
   displayEmail.textContent = emailInput.value;
-  displayPhone.textContent = phoneInput.value;
-  displayBirthday.textContent = birthdayInput.value;
+  displayPhone.textContent = formatPhoneNumber(phoneInput.value);
+  displayBirthday.textContent = formatdate(birthdayInput.value);
 
   handleImageUpload();
+}
+
+function formatPhoneNumber(phoneNumber) {
+  const cleanedNumber = phoneNumber.replace(/\D/g, "");
+
+  const formattedNumber = `${cleanedNumber.substr(0, 3)}
+  -${cleanedNumber.substr(3, 3)}-${cleanedNumber.substr(6)}`;
+
+  return formattedNumber;
+}
+
+function formatdate(dateInput) {
+  var date = new Date(dateInput);
+  dateInput = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  return dateInput;
 }
 
 function handleImageUpload() {
@@ -77,13 +94,8 @@ function showImage(input) {
   }
 }
 
-function clearErrors() {
-  fullNameError.textContent = "";
-  emailError.textContent = "";
-  phoneError.textContent = "";
-  birthdayError.textContent = "";
-  passwordError.textContent = "";
-  confirmPasswordError.textContent = "";
+function clearError(err) {
+  err.textContent = "";
 }
 
 function resetForm() {
@@ -120,7 +132,9 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   addButton.addEventListener("click", function (event) {
-    validateForm(event);
+    if (validateForm()) {
+      submitForm();
+    }
   });
 
   imageUpload.addEventListener("change", function () {
@@ -143,117 +157,108 @@ document.addEventListener("keydown", function (event) {
   }
 });
 
-function validateForm(event) {
-  const fullName = fullNameInput.value.trim();
-  const email = emailInput.value.trim();
-  const phone = phoneInput.value.trim();
-  const birthday = birthdayInput.value.trim();
-  const password = passwordInput.value;
-  const confirmPassword = confirmPasswordInput.value;
-
-  let isValid = true;
-
-  fullNameError.textContent = "";
-  emailError.textContent = "";
-  phoneError.textContent = "";
-  birthdayError.textContent = "";
-  passwordError.textContent = "";
-  confirmPasswordError.textContent = "";
-
-  if (fullName === "") {
-    fullNameError.textContent = "Full Name cannot be empty";
-    isValid = false;
-  }
-
-  if (email === "") {
-    emailError.textContent = "Email cannot be empty";
-    isValid = false;
-  } else if (!emailRegex.test(email)) {
-    emailError.textContent = "Invalid email format";
-    isValid = false;
-  }
-
-  if (phone === "") {
-    phoneError.textContent = "Phone cannot be empty";
-    isValid = false;
-  } else if (!phoneRegex.test(phone)) {
-    phoneError.textContent = "Invalid phone format (should start with 0)";
-    isValid = false;
-  }
-
-  if (birthday === "") {
-    birthdayError.textContent = "Birthday cannot be empty";
-    isValid = false;
-  } else if (!birthdayRegex.test(birthday)) {
-    birthdayError.textContent =
-      "Invalid birthday format (should be dd/mm/YYYY)";
-    isValid = false;
-  }
-
-  if (password === "") {
-    passwordError.textContent = "Password cannot be empty";
-    isValid = false;
-  } else if (!passwordRegex.test(password)) {
-    passwordError.textContent =
-      "Password must be 8-30 characters, start with a letter, and include at least one digit, one special character, and one uppercase letter.";
-    isValid = false;
-  }
-
-  if (confirmPassword === "") {
-    confirmPasswordError.textContent = "Confirm Password cannot be empty";
-    isValid = false;
-  } else if (confirmPassword !== password) {
-    confirmPasswordError.textContent = "Passwords do not match";
-    isValid = false;
-  }
-
-  if (!isValid) {
-    event.preventDefault();
-  } else {
-    submitForm();
-  }
-
-  fullNameInput.addEventListener("input", function () {
-    clearErrorIfValid(fullNameInput, fullNameError);
-  });
-
-  emailInput.addEventListener("input", function () {
-    clearErrorIfValid(emailInput, emailError);
-  });
-
-  phoneInput.addEventListener("input", function () {
-    clearErrorIfValid(phoneInput, phoneError);
-  });
-
-  birthdayInput.addEventListener("input", function () {
-    clearErrorIfValid(birthdayInput, birthdayError);
-  });
-
-  passwordInput.addEventListener("input", function () {
-    clearErrorIfValid(passwordInput, passwordError);
-  });
-
-  confirmPasswordInput.addEventListener("input", function () {
-    clearErrorIfValid(confirmPasswordInput, confirmPasswordError);
-  });
-
-  function clearErrorIfValid(input, errorSpan) {
-    if (input.checkValidity()) {
-      errorSpan.textContent = "";
-    }
-  }
-  function validatePhone() {
-    const phone = phoneInput.value.trim();
-    const isValid = phoneRegex.test(phone);
-
-    if (!isValid) {
-      phoneError.textContent = "Invalid phone format";
-    }
-
-    return isValid;
-  }
-  phoneInput.addEventListener("input", function () {
-    validatePhone(); // Kiểm tra tính hợp lệ
-    clearErrorIfValid(phoneInput, phoneError);
-  });
+function validateForm() {
+  return isValid;
 }
+
+function Validate(element, errorElement) {
+  var value = element.value.trim();
+  isValid = true;
+  var formatError = `Invalid ${element.id} format`;
+  const regexLists = {
+    email: emailRegex,
+    birthday: birthdayRegex,
+    phone: phoneRegex,
+    password: passwordRegex,
+  };
+
+  switch (element.id) {
+    case "fullName":
+      if (value === "") {
+        errorElement.textContent = `${element.id} cannot be empty`;
+        isValid = false;
+      }
+      break;
+    case "email":
+      formatError = "Invalid email format";
+      if (value === "") {
+        errorElement.textContent = `${element.id} cannot be empty`;
+        isValid = false;
+      } else if (!regexLists[element.id].test(value)) {
+        errorElement.textContent = formatError;
+        isValid = false;
+      }
+      break;
+    // case "birthday":
+    //   value = formatdate(value)
+    //   formatError = "Invalid birthday format (should be dd/mm/YYYY)"
+    //   if (value === "") {
+    //     errorElement.textContent = `${element.id} cannot be empty`;
+    //     isValid = false;
+    //   } else if (!regexLists[element.id].test(value)) {
+    //     errorElement.textContent = formatError
+    //     isValid = false;
+    //   }
+    //   break;
+    case "phone":
+      formatError =
+        "Invalid phone format (must have 10 numbers and start with 0)";
+      if (value === "") {
+        errorElement.textContent = `${element.id} cannot be empty`;
+        isValid = false;
+      } else if (!regexLists[element.id].test(value)) {
+        errorElement.textContent = formatError;
+        isValid = false;
+      }
+      break;
+    case "password":
+      formatError =
+        "Password must be 8-30 characters, start with a letter, and include at least one digit, one special character, and one uppercase letter.";
+      if (value === "") {
+        errorElement.textContent = `${element.id} cannot be empty`;
+        isValid = false;
+      } else if (!regexLists[element.id].test(value)) {
+        errorElement.textContent = formatError;
+        isValid = false;
+      }
+      break;
+    case "confirmPassword":
+      formatError = "Passwords do not match";
+      if (value === "") {
+        errorElement.textContent = `${element.id} cannot be empty`;
+        isValid = false;
+      } else if (value !== passwordInput.value) {
+        errorElement.textContent = formatError;
+        isValid = false;
+      }
+      break;
+  }
+
+  if (isValid) {
+    errorElement.textContent = "";
+  }
+}
+
+emailInput.addEventListener("input", function () {
+  Validate(emailInput, emailError);
+});
+
+fullNameInput.addEventListener("input", function () {
+  Validate(fullNameInput, fullNameError);
+});
+
+phoneInput.addEventListener("input", function () {
+  Validate(phoneInput, phoneError);
+});
+
+birthdayInput.addEventListener("input", function () {
+  Validate(birthdayInput, birthdayError);
+});
+
+passwordInput.addEventListener("input", function () {
+  Validate(passwordInput, passwordError);
+});
+
+confirmPasswordInput.addEventListener("input", function () {
+  Validate(confirmPasswordInput, confirmPasswordError);
+});
